@@ -24,19 +24,16 @@ const login = async (req, res)=>{
 
         const userLog = {
             id: user.id,
-            name: user.name,
-            age: user.age,
-            email: email,
-            role: user.role
+            username: user.name
          }
 
         const token = await generateJWT(userLog)
 
         res.status(200).json({
-            ok:true,
-            userLog,
+            "success": true,
+            "message": "Authorized",
+            "user": userLog,
             token,
-            mgs: "Logeado"
         })
 
     }
