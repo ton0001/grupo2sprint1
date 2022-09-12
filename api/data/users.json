@@ -6,7 +6,8 @@
     "password": "123456",
     "firstname": "Ayrton",
     "lastname": "Senna",
-    "profilepic": "https://thispersondoesnotexist.com/image"
+    "profilepic": "https://thispersondoesnotexist.com/image",
+    "role": "ADMIN"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "password": "123456",
     "firstname": "Ignacio",
     "lastname": "Feito",
-    "profilepic": "https://thispersondoesnotexist.com/image2"
+    "profilepic": "https://thispersondoesnotexist.com/image2",
+    "role": "GOD"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "password": "123456",
     "firstname": "Rodrigo",
     "lastname": "Alonso",
-    "profilepic": "https://thispersondoesnotexist.com/image3"
+    "profilepic": "https://thispersondoesnotexist.com/image3",
+    "role": "ADMIN"
   },
   {
     "id": 4,
@@ -33,6 +36,7 @@
     "password": "123456",
     "firstname": "Joaquin",
     "lastname": "Puyol",
-    "profilepic": "https://thispersondoesnotexist.com/image4"
+    "profilepic": "https://thispersondoesnotexist.com/image4",
+    "role": "GUEST"
   }
 ]
