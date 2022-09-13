@@ -1,4 +1,3 @@
-
 const express = require('express')
 const {json} = express
 const fs = require("fs");
@@ -154,8 +153,34 @@ const productController = {
             msg:'server error'
         });
     }
-}
+  },
+  listCategory: (req, res) => {
+    let category = req.query.category;
+
+    try{
+      let dbProduct = fs.readFileSync(
+        "api/data/products.json",
+        "utf-8"
+      );
+      dbProduct = JSON.parse(dbProduct);
+
+      let categoryFind = dbProduct.find(el => el.category.toLowerCase() === category.toLowerCase())
+      
+      if(categoryFind){
+        let dbProductFilter = dbProduct.filter(el => el.category.toLowerCase() === category.toLowerCase());
+        res.status(200).send(dbProductFilter);
+      } else {
+        res.status(404).json({
+          msg: 'Not Found'
+        })
+      }
+    } catch(err){
+      console.log(err)
+      res.status(500).json({
+        msg: 'Error interno'
+     });
+    }
+  }
 };
 
 module.exports = productController;
-
