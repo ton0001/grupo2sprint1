@@ -1,5 +1,5 @@
-const { json } = require("express");
-const express = require("express");
+const express = require('express')
+const {json} = express
 const fs = require("fs");
 const path = require("path");
 
@@ -17,19 +17,20 @@ const productController = {
   },
 
   oneProduct: function (req, res) {
+    const readAllProduct = fs.readFileSync("api/data/products.json", "utf-8");
+    const readAllProductParsered = JSON.parse(readAllProduct);
+
     try {
-      if (res.status(200)) {
-        const readAllProduct = fs.readFileSync(
-          "api/data/products.json",
-          "utf-8"
-        );
-        const readAllProductParsered = JSON.parse(readAllProduct);
-        const filteredProduct = readAllProductParsered.filter((product) => {
-          return product.id === Number(req.params.id);
+      const filteredProduct = readAllProductParsered.filter((product) => {
+        return product.id === Number(req.params.id);
+      });
+      if (filteredProduct === []) {
+        res.status(404).json({
+          ok: false,
+          msg: "El producto no existe",
         });
-        res.send(filteredProduct);
       } else {
-        res.status(500).send("Sever Error");
+        res.status(200).json(filteredProduct);
       }
     } catch (error) {
       res.send(error);
@@ -77,10 +78,9 @@ const productController = {
 
   productEdit: function (req, res) {
     const { id, ...restoDeElementos } = req.body;
-    const idProduct = req.params.id
+    const idProduct = req.params.id;
 
     console.log(idProduct);
-    
 
     try {
       const dataToParse = fs.readFileSync("api/data/products.json", "utf-8");
@@ -104,19 +104,25 @@ const productController = {
     }
   },
 
-  mostWanted: function(req,res){
-    
-    const wantedParam = req.params.mostwanted
+  mostWanted: function (req, res) {
     
     const readProducts = fs.readFileSync("api/data/products.json", "utf-8");
     const productParsered = JSON.parse(readProducts);
 
-    const filteredProduct = productParsered.find((product) => {
+    try {
       
-    });
-    console.log(filteredProduct);
-
-  }
+        const filteredProduct = productParsered.filter((product) => {
+        return product.mostWanted === true;
+      });
+      
+      res.status(200).json(filteredProduct)
+      
+      
+    } catch (err) {
+      
+      console.log(err);
+    }
+  },
 };
 
 module.exports = productController;
