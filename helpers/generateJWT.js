@@ -18,8 +18,4 @@ const generateJWT = (payload = {} ) => {
 
 }
 
-
-
-
-
 module.exports = { generateJWT }
