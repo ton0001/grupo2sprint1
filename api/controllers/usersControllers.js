@@ -1,5 +1,7 @@
 const fs = require('fs');
 const generateJWT = require('../../helpers/generateJWT');
+const path = require("path");
+
 
 
 const login = async (req, res)=>{
@@ -7,7 +9,8 @@ const login = async (req, res)=>{
     const {email, password} = req.body;
 
     try {
-        const dbUsers=fs.readFileSync('/Users/victoriacampiotti/Documents/grupo2sprint1/api/data/users.json', 'utf-8')
+        const ruta=path.join(__dirname, '..', 'data', 'users.json')
+        const dbUsers=fs.readFileSync(ruta, 'utf-8')
         const users=JSON.parse(dbUsers)
 
 

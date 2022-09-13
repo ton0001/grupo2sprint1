@@ -5,7 +5,7 @@ const verifyJWT = (req, res, next) =>{
     const {authorization: token} = req.headers
     try {
 
-        jwt.verify(token, process.env.JWT_PRIVATE)
+        req.body.tokenID= jwt.verify(token, process.env.JWT_PRIVATE).id
         next();
     }
     catch (err){ 

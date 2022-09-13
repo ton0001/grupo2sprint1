@@ -1,13 +1,15 @@
 const express = require('express');
 const {login} =  require('../controllers/usersControllers');
-const {verifyRole, verifyAdmin, verifyUsers, verifyGod} = require('../middlewares/verifyRole');
+const verifyJWT = require('../middlewares/verifyJWT');
+const { isAuthenticated} = require('../middlewares/verifyRole');
 
 const router = express.Router();
 
-router.get('/:id', verifyRole, verifyUsers, (req, res, next)=>{
+
+router.get('/:id', verifyJWT, isAuthenticated(['GUEST', 'ADMIN', 'GOD'], true), (req, res, next)=>{
     res.send("Es el usuario correcto")
 })
-router.get('/', verifyRole, verifyGod, (req, res, next)=>{
+router.get('/', isAuthenticated(['ADMIN', 'GOD'], false), (req, res, next)=>{
     res.send("Es adminstrador o GOD")
 })
 

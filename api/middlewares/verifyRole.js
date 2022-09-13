@@ -1,91 +1,66 @@
-const { verify } = require('crypto');
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
+const fs = require("fs");
+const jwt = require("jsonwebtoken");
+const path = require("path");
 
-
-const verifyRole = (req, res, next)=>{
+// Authentication middleware (roles = array roles autorizados)
+const isAuthenticated = (roles, IDverifiy = false) => (req, res, next) => {
     
+    verifyRole(req, res)
+
+    if (roles.indexOf(req.body.role) !== -1) {
+        if (IDverifiy === false) next();
+        else{
+            if (req.body.role == "GOD") next();
+            else{
+                if (req.body.id === Number(req.params.id)) next();
+                else
+                    return res.status(403).json({
+                        ok: false,
+                        msg: "Unauthorized ID does not match with logged ID",
+                    });
+            }
+        } 
+    }else{
+        return res.status(401).json({
+            ok: false,
+            msg: "Unauthorized",
+        });
+    }
+};
+
+const verifyRole = (req, res) => {
     const { authorization: token } = req.headers;
 
-    try{
-        const dbUsers=fs.readFileSync('/Users/victoriacampiotti/Documents/grupo2sprint1/api/data/users.json', 'utf-8')
-        const users=JSON.parse(dbUsers)
+    try {
+        const ruta=path.join(__dirname, '..', 'data', 'users.json')
+        const dbUsers = fs.readFileSync(ruta, "utf-8");
+        const users = JSON.parse(dbUsers);
+        
 
-        const { id } = jwt.verify(token, process.env.JWT_PRIVATE);
+        const idToken = req.body.tokenID
 
         const user = users.find((user) => {
-            return (user.id === Number(id));
-        })
+            return user.id === Number(idToken);
+        });
 
-        if(user){
-            req.body.id = user.id
-            req.body.role=user.role
-            next()
-
-        }
-        else{
+        if (user) {
+            req.body.id = user.id;
+            req.body.role = user.role;
+            return
+            // next();
+        } else {
             return res.status(403).json({
-                ok: false,
-                msg: "No autorizado"
-             })
-        }
-
+            ok: false,
+            msg: "No autorizado",
+            });
     }
-    catch(err){
+    }catch (err) {
         console.log(err);
-        return res.status(401).json({
-           ok: false,
-           msg: "Token no valido"
-        })
+        return res.status(500).json({
+        ok: false,
+        msg: "Error de servidor",
+        });
     }
+};
 
-}
-
-const verifyGod = (req, res, next)=>{
-
-    if (req.body.role === "GOD"){
-        console.log("es dios")
-        next()
-    }
-    else{
-        console.log("no es god")
-        return res.status(403).json({
-            ok: false,
-            msg: "No autorizado"
-         })
-    }
-}
-
-const verifyAdmin = (req, res, next)=>{
-
-    if (req.body.role !== "ADMIN"){
-        console.log("es adminstrador")
-        next()
-    }
-    else{
-        console.log("no es admin")
-        return res.status(403).json({
-            ok: false,
-            msg: "No autorizado"
-         })
-    }
-
-}
-
-const verifyUsers = (req, res, next) => {
-
-    if (req.body.id === Number(req.params.id)){
-        console.log("Usuario coincide")
-        next()
-    }
-    else{
-        console.log("no coincide con el usuario logeafo")
-        return res.status(403).json({
-            ok: false,
-            msg: "No autorizado"
-         })
-    }
-}
-
-
-module.exports = {verifyRole, verifyAdmin, verifyUsers, verifyGod};
+module.exports = {isAuthenticated };
