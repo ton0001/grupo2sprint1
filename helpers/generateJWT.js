@@ -5,7 +5,6 @@ const generateJWT = (payload = {} ) => {
     return new Promise( (resolve, reject) => {
 
         jwt.sign(payload, process.env.JWT_PRIVATE, {
-            expiresIn: '1h',
             algorithm: 'HS512'
         }, (err, token)=> {
             if (err){
@@ -19,4 +18,13 @@ const generateJWT = (payload = {} ) => {
 
 }
 
-module.exports =  generateJWT
+
+const extractToken = (req)=>{
+    if(req.headers.authorization && req.headers.authorization.split(' ')[0] === "Bearer"){
+        return req.headers.authorization.split(' ')[1]
+    }
+    return null
+}
+
+
+module.exports = { generateJWT }
