@@ -63,7 +63,6 @@ const isAuthenticated = (roles) => (req, res, next) => {
 
 
 const verifyUser = (req)=>{
-    console.log(Number(req.params.id) === Number(req.body.id))
     if (Number(req.params.id) === Number(req.body.id)) return true
     else return false
 }

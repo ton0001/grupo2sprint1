@@ -19,7 +19,6 @@ const verifyJWT = (req, res, next) =>{
 }
 
 
-
 const extractToken = (req)=>{
 
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === "Bearer"){

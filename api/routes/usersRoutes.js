@@ -8,16 +8,25 @@ const {
   deleteUser,
   login
 } = require("../controllers/usersController");
-const verifyJWT = require('../middlewares/verifyJWT');
-const { isAuthenticated} = require('../middlewares/verifyRoles');
 
-router.get("/", verifyJWT, getUsers);
-router.get("/:id", verifyJWT, isAuthenticated(['GUESTID', 'ADMIN', 'GOD']), getUserById);
+const cartsController = require('../controllers/cartsController');
+
+const verifyJWT = require('../middlewares/verifyJWT');
+const {isAuthenticated} = require('../middlewares/verifyRoles');
+
+router.get("/", verifyJWT, isAuthenticated(['GOD', 'ADMIN']), getUsers);
+router.get('/:id/cart', cartsController.listCart);
+router.get("/:id", verifyJWT, isAuthenticated(['GOD', 'ADMIN', 'GUESTID']), getUserById);
 router.post("/", createUser);
+router.put('/:id/cart', cartsController.updateCart);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
 
 router.post('/login', login);
+
+
+
+
 
 
 module.exports = router;

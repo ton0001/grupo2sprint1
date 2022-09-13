@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const generateJWT = require('../../helpers/generateJWT');
+const {generateJWT} = require('../../helpers/generateJWT');
 
 //recupero la lista de usuarios, respondo con un array conteniendo todos los usuarios del sistema
 
