@@ -105,20 +105,45 @@ const createPic = (req, res) =>{
 //funcion que actualiza los datos de una picture
 const updatePic = (req,res) =>{
     try { 
-        const id = req.body.id;
+
+        let pictures = fs.readFileSync('/Users/diegogastongomez/Desktop/grupo2sprint1/api/data/gallery.json', 'utf-8');
+        pictures = JSON.parse(pictures);
+
+        const id = req.params.id;
         const url = req.body.url;
         const description = req.body.description;
+        const productId = req.body.productId;
 
-        if(estanLosDatos(id, url, description)){
-            res.status(200).json({
-                ok: true,
-                msg: 'imagen editada'
+
+        if(!url && !description && !productId){
+            res.status(400).json({
+                ok:false,
+                msg:'debe indicar el dato a editar'
             });
         }
         else{
-            res.status(400).json({
-                ok:false,
-                msg:'todos los campos son requeridos'
+            //const editar = pictures.find(elem => elem.id === parseInt(req.body.id));
+            let encontro = false;
+            for(let i = 0; i<pictures.length && !encontro; i++){
+                if(pictures[i].id === parseInt(id)){
+                    if(url){
+                        pictures[i].url = url;
+                    }
+                    if(description){
+                        pictures[i].description = description;
+                    }
+                    if(productId){
+                        pictures[i].productId = productId;
+                    }
+                    encontro = true;
+                }
+            }
+
+            fs.writeFileSync('/Users/diegogastongomez/Desktop/grupo2sprint1/api/data/gallery.json', JSON.stringify(pictures));
+
+            res.status(200).json({
+                ok: true,
+                msg: 'imagen editada'
             });
         }
 
