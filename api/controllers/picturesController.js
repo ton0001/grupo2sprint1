@@ -1,5 +1,37 @@
 const fs = require('fs')
 
+const getPictureByProductId = (req, res) =>{
+
+
+    try {
+        let pictures = fs.readFileSync('/Users/diegogastongomez/Desktop/grupo2sprint1/api/data/gallery.json', 'utf-8');
+        pictures = JSON.parse(pictures);
+
+        const resp = pictures.filter(elem => elem.productId === parseInt(req.query.product));
+
+        if(resp){
+            res.status(200).json({
+                ok: true,
+                resp
+            })
+        }else{
+            res.status(404).json({
+                ok: false,
+                msg: 'no existen coincidencias'
+            })
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            ok:false,
+            msg:'server error'
+        });
+    }
+}
+
+
 //funcion que devuelve una imagen por el id de la misma
 const getPictureById = (req, res) =>{
 
@@ -150,5 +182,6 @@ module.exports = {
     createPic,
     updatePic,
     getPictureById,
-    deletePicture
+    deletePicture,
+    getPictureByProductId,
 }
