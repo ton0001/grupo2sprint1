@@ -52,7 +52,7 @@
     "stock": 50
   },
   {
-    "id":4,
+    "id":5,
     "title": "Detergente",
     "price": 50,
     "description": "Detergente Nevex",
@@ -79,3 +79,4 @@
   }
   
 ]
+
