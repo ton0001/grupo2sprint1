@@ -49,7 +49,7 @@ const createUser = (req, res) => {
     );
     users = JSON.parse(users);
     const newUser = {
-      id: users.length + 1,
+      id: users.at(-1).id + 1,
       email: req.body.email,
       username: req.body.username,
       password: req.body.password,
