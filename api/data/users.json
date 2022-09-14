@@ -94,5 +94,24 @@
     "firstname": "Ignacio",
     "profilepic": "https://thispersondoesnotexist.com/image2",
     "role": "GOD"
+  },
+  {
+    "id": 11,
+    "email": "nacho@gmail.com",
+    "username": "nachos",
+    "password": "123456",
+    "firstname": "Ignacio",
+    "profilepic": "https://thispersondoesnotexist.com/image2",
+    "role": "GOD"
+  },
+  {
+    "id": 12,
+    "email": "nacho@gmail.com",
+    "username": "nachos",
+    "password": "123456",
+    "firstname": "Ignacio",
+    "lastname": "Martinez",
+    "profilepic": "https://thispersondoesnotexist.com/image2",
+    "role": "GOD"
   }
 ]

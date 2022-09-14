@@ -39,50 +39,48 @@ const productController = {
   },
 
   createProdut: function (req, res) {
-    const readProducts = fs.readFileSync("api/data/products.json", "utf-8");
-    const productParsered = JSON.parse(readProducts);
 
-    const newProduct = {
-      id: productParsered.at(-1).id + 1,
-      title: req.body.title,
-      price: req.body.price,
-      description: req.body.description,
-      image: req.body.image,
-      gallery: req.body.gallery,
-      category: req.body.category,
-      price: req.body.price,
-      mostWanted: req.body.mostWanted,
-      stock: req.body.stock
-    };
+  if(!estanLosDatos(req.body)){
+      res.status(400).json({ message: "Faltan datos para crear el producto"})
+  }
+  else{
 
-    try {
-      if (Object.values(newProduct) === "") {
-        res.status(400).json({
-          ok: false,
-          msg: "Tiene que agregar todos los datos",
-        });
-      } else {
-        productParsered.push(newProduct);
+    try{
+      const readProducts = fs.readFileSync("api/data/products.json", "utf-8");
+      const productParsered = JSON.parse(readProducts);
+  
+  
+      const newProduct = {
+        id: productParsered.at(-1).id + 1,
+        title: req.body.title,
+        price: req.body.price,
+        description: req.body.description,
+        image: req.body.image,
+        gallery: req.body.gallery,
+        category: req.body.category,
+        mostWanted: req.body.mostWanted,
+        stock: req.body.stock
+      };
+
+       productParsered.push(newProduct);
+
+        fs.writeFileSync("api/data/products.json", JSON.stringify(productParsered));
         res.status(200).json({
           ok: true,
           msg: "producto agregado",
         });
-
-        fs.writeFileSync(
-          "api/data/products.json",
-          JSON.stringify(productParsered)
-        );
-      }
-    } catch (error) {
-      res.json(" Aca esta el " + error);
+    }catch(error){
+      res.status(500).json({
+        ok: false,
+        msg: "Error de servidor",
+      });
     }
+  }
   },
 
   productEdit: function (req, res) {
     const { id, ...restoDeElementos } = req.body;
     const idProduct = req.params.id;
-
-    console.log(idProduct);
 
     try {
       const dataToParse = fs.readFileSync("api/data/products.json", "utf-8");
@@ -91,7 +89,6 @@ const productController = {
       const dataUpdate = data.map((product) => {
         if (product.id === Number(idProduct)) {
           const newEl = { ...product, ...restoDeElementos };
-          console.log(newEl);
           return newEl;
         } else {
           //console.log(product);
@@ -125,10 +122,13 @@ const productController = {
       console.log(err);
     }
   },
+
   getPicByProductId : (req, res) =>{
     try {
-        let products = fs.readFileSync('/Users/diegogastongomez/Desktop/grupo2sprint1/api/data/products.json', 'utf-8');
+        const ruta=path.join(__dirname, '..', 'data', 'products.json')
+        let products = fs.readFileSync(ruta, 'utf-8');        
         products = JSON.parse(products);
+        
 
         let resp = products.find(elem => elem.id === parseInt(req.params.id));
 
@@ -156,6 +156,7 @@ const productController = {
         });
     }
   },
+
   listCategory: (req, res) => {
     let category = req.query.category;
 
@@ -243,3 +244,12 @@ const productController = {
 };
 
 module.exports = productController;
+
+const estanLosDatos = (campos)=>{
+  let ret=true
+  if(!campos.title || !campos.price || !campos.description ||  !campos.image || !campos.gallery || !campos.category || !campos.mostWanted || !campos.stock){
+    ret = false
+  }
+  return ret
+
+}
