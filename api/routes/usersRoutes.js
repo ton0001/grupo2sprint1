@@ -21,7 +21,7 @@ router.get("/:id", verifyJWT, isAuthenticated(['GOD', 'ADMIN', 'GUESTID']), getU
 router.post("/", createUser);
 router.put('/:id/cart', verifyJWT, isAuthenticated(['GOD', 'ADMINID', 'GUESTID']), cartsController.updateCart);
 router.put("/:id", verifyJWT, isAuthenticated(['GOD', 'ADMINID', 'GUESTID']), updateUser);
-router.delete("/:id", isAuthenticated(['GOD', 'ADMINID', 'GUESTID']), verifyJWT, deleteUser);
+router.delete("/:id", verifyJWT, isAuthenticated(['GOD', 'ADMINID', 'GUESTID']), deleteUser);
 
 router.post('/login', login);
 

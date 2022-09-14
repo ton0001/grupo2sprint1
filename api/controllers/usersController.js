@@ -43,7 +43,15 @@ const getUserById = (req, res) => {
 //Creo un nuevo Usuario. Debe recibir un body con la informacion del usuario a crear. Responde con la indormacion completa del usuario creado
 
 const createUser = (req, res) => {
+
+  if(!estanLosDatos(req.body)){
+      res.status(401).json({ message: "Faltan datos para crear el usuario"})
+  }
+  else{
+
+
   try {
+    
     let users = fs.readFileSync(
       path.join(__dirname, "../data/users.json"),
       "utf-8"
@@ -66,8 +74,10 @@ const createUser = (req, res) => {
     );
     res.send(newUser);
   } catch (error) {
-    res.status(500).send({ message: "Error al crear el usuario" });
+    res.status(500).json({ message: "Error al crear el usuario" });
   }
+}
+
 };
 
 /*Actualiza un usuario identificado con id. 
@@ -186,7 +196,6 @@ const login = async (req, res)=>{
 
 
 
-
 module.exports = {
   getUsers,
   getUserById,
@@ -195,3 +204,13 @@ module.exports = {
   deleteUser,
   login
 };
+
+
+const estanLosDatos = (campos)=>{
+  let ret=true
+  if(!campos.email || !campos.username || !campos.password || !campos.firstname || !campos.lastname || !campos.profilepic || !campos.role){
+    ret = false
+  }
+  return ret
+
+}

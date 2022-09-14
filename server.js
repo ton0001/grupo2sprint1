@@ -21,7 +21,7 @@ app.post('/api/v1/login', login)
 app.use('/api/v1/products',productRoutes)
 app.use('/api/v1/pictures',pictureRoutes)
 app.use('/api/v1/carts', cartRoutes)
-app.use('/api/v1/user', usersRoutes);
+app.use('/api/v1/users', usersRoutes);
 
 
 

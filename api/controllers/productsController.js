@@ -48,9 +48,11 @@ const productController = {
       price: req.body.price,
       description: req.body.description,
       image: req.body.image,
-      gallery: req.body.image,
+      gallery: req.body.gallery,
       category: req.body.category,
       price: req.body.price,
+      mostWanted: req.body.mostWanted,
+      stock: req.body.stock
     };
 
     try {
