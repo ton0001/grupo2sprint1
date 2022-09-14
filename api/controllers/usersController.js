@@ -11,6 +11,7 @@ const getUsers = (req, res) => {
       "utf-8"
     );
     users = JSON.parse(users);
+    users.forEach(user => delete user.password)
     res.send(users);
   } catch (error) {
     res.status(500).send({ message: "Error al obtener los usuarios" });
