@@ -99,4 +99,4 @@ const getRole = (req, res) => {
     }
 };
 
-module.exports = {isAuthenticated};
+module.exports = isAuthenticated;

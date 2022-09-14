@@ -8,6 +8,7 @@ const usersRoutes = require("./api/routes/usersRoutes");
 const pictureRoutes = require('./api/routes/pictureRoutes')
 const cartRoutes = require('./api/routes/cartsRoutes')
 
+const {login} = require("./api/controllers/usersController");
 
 // const {login} =  require('./api/controllers/usersController');
 
@@ -15,6 +16,7 @@ const cartRoutes = require('./api/routes/cartsRoutes')
 app.use(express.json());
 
 app.get('/api/v1',  (req, res)=>{ res.status(200).send("API funcionando correctamente")})
+app.post('/api/v1/login', login)
 
 app.use('/api/v1/products',productRoutes)
 app.use('/api/v1/pictures',pictureRoutes)
