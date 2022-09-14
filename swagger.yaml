@@ -59,18 +59,32 @@ paths:
                     profilepic:
                       type: string
                     role:
-                      type: string
-
-    
+                      type: string   
         '500':    # status code
           description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         '401':
           description: Usuario no autorizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
         
     post:
       tags: 
         - usuarios
-      summary: Crear un usuario
+      summary: Crear un usuario. Debe recibir un body con la info del user a crear.
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -78,11 +92,40 @@ paths:
             schema:
               type: object
               properties:
-                nombre:
-                  type: string
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  password: 
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  profilepic:
+                    type: string
+                  role:
+                    type: string
       responses: 
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  profilepic:
+                    type: string
+                  role:
+                    type: string
         '400':
           description: Bad request
           content:
@@ -90,13 +133,154 @@ paths:
               schema:
                 type: object
                 properties:
-                  msj:
+                  message:
                     type: string
-  /users/{username}:
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /users/{id}:
+    get:
+      tags: 
+        - usuarios
+      summary: Recupera el user con el id solicitado.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Filtrar usuario por id.
+          required: true
+          explode: true
+          schema:
+            type: number
+      responses:
+        '200':    # status code
+          description: Un array de usuarios
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  id:
+                    type: number
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  profilepic:
+                    type: string
+                  role:
+                    type: string
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Error al obtener el usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+    put:
+      tags: 
+        - usuarios
+      summary: Actualiza el user identificado con id. Debe recibir un body con la info del user a modificar.
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: Filtrar usuario por id.
+          required: true
+          explode: true
+          schema:
+            type: number
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  password: 
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  profilepic:
+                    type: string
+                  role:
+                    type: string
+      responses:
+        '200':    # status code
+          description: Un array de usuarios
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  id:
+                    type: number
+                  email:
+                    type: string
+                  username:
+                    type: string
+                  firstname:
+                    type: string
+                  lastname:
+                    type: string
+                  profilepic:
+                    type: string
+                  role:
+                    type: string
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '500':
+          description: Error al obtener el usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
     delete:
       tags: 
         - usuarios
-      summary: Elimina un usuario
+      summary: Elimina un usuario con id.
+      security:
+        - bearerAuth: []
       parameters:
         - in: path
           name: username
@@ -109,19 +293,36 @@ paths:
         '200':
           description: El usuario ha sido eliminado
         '409':
-          description: El usuario no ha sido eliminado
-  /demo:
-    get:
-      tags: 
-        - usuarios
-      summary: Retorna listado de usuario.
-      security:
-        - bearerAuth: []
-      responses:
-        '200':    # status code
-          description: Un array de usuarios
-        '401':    # status code
-          description: Usuario no autorizado  
+          description: El usuario no ha sido eliminado 
+  # /demo:
+  #   get:
+  #     tags: 
+  #       - usuarios
+  #     summary: Retorna listado de usuario.
+  #     security:
+  #       - bearerAuth: []
+  #     responses:
+  #       '200':    # status code
+  #         description: Un array de usuarios
+  #       '401':    # status code
+  #         description: Usuario no autorizado 
+  #   delete:
+  #     tags: 
+  #       - usuarios
+  #     summary: Elimina un usuario
+  #     parameters:
+  #       - in: path
+  #         name: username
+  #         schema:
+  #           type: string
+  #         required: true
+  #         description: Nombre de usuario
+      
+  #     responses: 
+  #       '200':
+  #         description: El usuario ha sido eliminado
+  #       '409':
+  #         description: El usuario no ha sido eliminado 
           
   /login:
     post:

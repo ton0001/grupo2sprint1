@@ -139,6 +139,17 @@ const deleteUser = (req, res) => {
         path.join(__dirname, "../data/users.json"),
         JSON.stringify(users)
       );
+      let carts = fs.readFileSync(path.join(__dirname, "../data/cart.json"))
+      carts = JSON.parse(carts);
+      const cartUser = carts.find(cart => cart.user === parseInt(req.params.id))
+      if(cartUser){
+        const index = carts.indexOf(cartUser);
+        carts.splice(index, 1);
+        fs.writeFileSync(
+          path.join(__dirname, "../data/carts.json"),
+          JSON.stringify(carts)
+        )
+      }
       res.send({ message: `Usuario ${user.id} eliminado` });
     } else {
       res.status(404).send({ message: "Usuario no encontrado" });
