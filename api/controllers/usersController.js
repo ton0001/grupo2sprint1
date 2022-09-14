@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const {generateJWT} = require('../../helpers/generateJWT');
 
 //recupero la lista de usuarios, respondo con un array conteniendo todos los usuarios del sistema
 
@@ -42,7 +43,15 @@ const getUserById = (req, res) => {
 //Creo un nuevo Usuario. Debe recibir un body con la informacion del usuario a crear. Responde con la indormacion completa del usuario creado
 
 const createUser = (req, res) => {
+
+  if(!estanLosDatos(req.body)){
+      res.status(401).json({ message: "Faltan datos para crear el usuario"})
+  }
+  else{
+
+
   try {
+    
     let users = fs.readFileSync(
       path.join(__dirname, "../data/users.json"),
       "utf-8"
@@ -65,8 +74,10 @@ const createUser = (req, res) => {
     );
     res.send(newUser);
   } catch (error) {
-    res.status(500).send({ message: "Error al crear el usuario" });
+    res.status(500).json({ message: "Error al crear el usuario" });
   }
+}
+
 };
 
 /*Actualiza un usuario identificado con id. 
@@ -136,10 +147,70 @@ const deleteUser = (req, res) => {
   }
 };
 
+
+const login = async (req, res)=>{
+
+  const {email, password} = req.body;
+
+  try {
+      const ruta=path.join(__dirname, '..', 'data', 'users.json')
+      const dbUsers=fs.readFileSync(ruta, 'utf-8')
+      const users=JSON.parse(dbUsers)
+
+
+      const user = users.find(user => {
+          return (user.email === email && user.password === password); 
+          })
+
+      if(!user){
+          return res.status(400).json({
+              ok:true,
+              mgs: "User NOT found"
+          })
+      }
+
+      const userLog = {
+          id: user.id,
+          username: user.name
+       }
+
+      const token = await generateJWT(userLog)
+
+      res.status(200).json({
+          "success": true,
+          "message": "Authorized",
+          "user": userLog,
+          token,
+      })
+
+  }
+  catch(error){
+      console.log(error)
+      res.status(500).json({
+          ok:false,
+          mgs: "Error login"
+      })
+
+  }
+}
+
+
+
 module.exports = {
   getUsers,
   getUserById,
   createUser,
   updateUser,
   deleteUser,
+  login
 };
+
+
+const estanLosDatos = (campos)=>{
+  let ret=true
+  if(!campos.email || !campos.username || !campos.password || !campos.firstname || !campos.lastname || !campos.profilepic || !campos.role){
+    ret = false
+  }
+  return ret
+
+}
