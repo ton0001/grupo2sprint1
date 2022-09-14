@@ -282,13 +282,13 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - in: path
-          name: username
-          schema:
-            type: string
+        - name: id
+          in: path
+          description: Eliminar el user identificado con id. 
           required: true
-          description: Nombre de usuario
-      
+          explode: true
+          schema:
+            type: number
       responses: 
         '200':
           description: El usuario ha sido eliminado
