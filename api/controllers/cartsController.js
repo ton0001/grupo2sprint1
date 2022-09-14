@@ -9,7 +9,11 @@ const controllerCart = {
       const cartDB = JSON.parse(cartDBJson);
 
       const cart = cartDB.find(el => el.user === Number(id));
-
+      if (!cart){
+        return res.status(400).json({
+          msg: 'Bad request'
+        });
+      }
       res.status(200).send(cart.cart)
     } catch (error) {
         console.log(error);

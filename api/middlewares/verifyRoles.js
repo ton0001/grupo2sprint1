@@ -8,7 +8,7 @@ const isAuthenticated = (roles) => (req, res, next) => {
     
     getRole(req, res)
 
-    switch (req.body.role){
+    switch (req.role){
 
         case "GOD":
             next();
@@ -63,7 +63,7 @@ const isAuthenticated = (roles) => (req, res, next) => {
 
 
 const verifyUser = (req)=>{
-    if (Number(req.params.id) === Number(req.body.id)) return true
+    if (Number(req.params.id) === Number(req.id)) return true
     else return false
 }
 
@@ -73,15 +73,15 @@ const getRole = (req, res) => {
         const dbUsers = fs.readFileSync(ruta, "utf-8");
         const users = JSON.parse(dbUsers);
         
-        const idToken = req.body.tokenID
+        const idToken = req.tokenID
 
         const user = users.find((user) => {
             return user.id === Number(idToken);
         });
 
         if (user) {
-            req.body.id = user.id;
-            req.body.role = user.role;
+            req.id = user.id;
+            req.role = user.role;
             return
             // next();
         } else {
