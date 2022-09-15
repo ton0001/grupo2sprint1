@@ -11,7 +11,9 @@ const productController = {
     try {
       res.status(200).json(readAllProductParsered);
     } catch (error) {
-      res.send(error);
+      res.status(500).json({
+        message: 'Error del servidor al cargar los productos'
+      });
       console.log("Catch error" + error);
     }
   },
@@ -67,12 +69,12 @@ const productController = {
         fs.writeFileSync("api/data/products.json", JSON.stringify(productParsered));
         res.status(200).json({
           ok: true,
-          msg: "producto agregado",
+          message: "producto agregado"
         });
     }catch(error){
       res.status(500).json({
         ok: false,
-        msg: "Error de servidor",
+        message: "Error del servidor al crear el producto"
       });
     }
   }
@@ -240,7 +242,7 @@ const productController = {
        console.log(error);
         res.status(500).json({
             ok: false,
-            msg: "Error de servidor",
+            msg: "Error del servidor al eliminar el producto",
        });
     }
  }

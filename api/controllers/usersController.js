@@ -176,7 +176,7 @@ const login = async (req, res)=>{
 
       if(!user){
           return res.status(400).json({
-              ok:true,
+              ok: false,
               mgs: "User NOT found"
           })
       }
