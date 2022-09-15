@@ -779,16 +779,39 @@ paths:
           type: number
       responses:
         '200':    # status code
-          description: producto eliminado con exito
+          description: Retorna los productos que tengan la keyword
           content:
             application/json:
               schema: 
-                type: object
-                properties:
-                  ok:
-                    type: boolean
-                  message:
-                    type: string
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    title:
+                      type: string
+                    price:
+                      type: number
+                    description:
+                      type: string
+                    image:
+                      type: string
+                    gallery:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          picture_id:
+                            type: number
+                          picture_url:
+                            type: string
+                    category:
+                      type: string
+                    mostwanted:
+                      type: boolean
+                    stock:
+                      type: number
         '400':    # status code
           description: Llamada incorrecta.
           content:
@@ -825,36 +848,798 @@ paths:
                     default: false
                   message:
                     type: string
-    
-    
+  /products/search{q}:
+    get:
+      tags: 
+        - productos
+      summary: Recupera una lista de products que contienen una keyword en alguno de sus atributos.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: q
+        in: query
+        description: Palabra clave para busqueda. 
+        required: true
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':    # status code
+          description: Retorna el producto.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    title:
+                      type: string
+                    price:
+                      type: number
+                    description:
+                      type: string
+                    image:
+                      type: string
+                    gallery:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          picture_id:
+                            type: number
+                          picture_url:
+                            type: string
+                    category:
+                      type: string
+                    mostwanted:
+                      type: boolean
+                    stock:
+                      type: number
+        '404':    # status code
+          description: No se encontraron productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
 
+  /products/mostwanted:
+    get:
+      tags: 
+        - productos
+      summary:  Recupera una lista de products que tienen el atributo mostwanted establecido en true.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    title:
+                      type: string
+                    price:
+                      type: number
+                    description:
+                      type: string
+                    image:
+                      type: string
+                    gallery:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          picture_id:
+                            type: number
+                          picture_url:
+                            type: string
+                    category:
+                      type: string
+                    mostwanted:
+                      type: boolean
+                    stock:
+                      type: number
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string  
 
-  # /demo:
-  #   get:
-  #     tags: 
-  #       - usuarios
-  #     summary: Retorna listado de usuario.
-  #     security:
-  #       - bearerAuth: []
-  #     responses:
-  #       '200':    # status code
-  #         description: Un array de usuarios
-  #       '401':    # status code
-  #         description: Usuario no autorizado 
-  #   delete:
-  #     tags: 
-  #       - usuarios
-  #     summary: Elimina un usuario
-  #     parameters:
-  #       - in: path
-  #         name: username
-  #         schema:
-  #           type: string
-  #         required: true
-  #         description: Nombre de usuario
-      
-  #     responses: 
-  #       '200':
-  #         description: El usuario ha sido eliminado
-  #       '409':
-  #         description: El usuario no ha sido eliminado 
+  /products{category}:
+    get:
+      tags: 
+        - productos
+      summary: Recupera una lista de products que tienen el atributo category establecido en ID.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: category
+        in: query
+        description: Palabra especifica de la categoria a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: string
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    title:
+                      type: string
+                    price:
+                      type: number
+                    description:
+                      type: string
+                    image:
+                      type: string
+                    gallery:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          picture_id:
+                            type: number
+                          picture_url:
+                            type: string
+                    category:
+                      type: string
+                    mostwanted:
+                      type: boolean
+                    stock:
+                      type: number
+        '404':    # status code
+          description: Productos no encontrados
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string  
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+
+  /picture:
+    post:
+      tags: 
+        - imagenes
+      summary:  Crea una nueva picture. Debe recibir un body con la info de la picture a crear.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    title:
+                      type: string
+                    price:
+                      type: number
+                    description:
+                      type: string
+                    image:
+                      type: string
+                    gallery:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          picture_id:
+                            type: number
+                          picture_url:
+                            type: string
+                    category:
+                      type: string
+                    mostwanted:
+                      type: boolean
+                    stock:
+                      type: number
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string  
+
+  /picture{product}:
+    get:
+      tags: 
+        - imagenes
+      summary: Recupera la lista de pictures del product identificado con id.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: product
+        in: query
+        description: Id del producto a buscar las picture. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string  
+  
+  /product/{id}/picture:
+    get:
+      tags: 
+        - productos
+      summary: Recupera la lista de pictures del product identificado con id.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id del producto a buscar las picture. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Retorna array con las picture.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+
+  /picture/{id}:
+    get:
+      tags: 
+        - imagenes
+      summary: Recupera la picture con el id solicitado.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la picture a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+        '404':    # status code
+          description: Pricture no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
+    
+    put:
+      tags: 
+        - imagenes
+      summary: Actualiza la picture identificada con id. Debe recibir un body con la info de la picture a modificar.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la picture a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+      responses:
+        '200':    # status code
+          description: Retorna array con los productos.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+        '400':    # status code
+          description: Llamada erronea.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '404':    # status code
+          description: Pricture no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
+
+    delete:
+      tags: 
+        - imagenes
+      summary: Elimina la picture con el id solicitado.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la picture a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Imagen eliminada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '404':    # status code
+          description: Pricture no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener los productos.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
+
+  /cart/{id}:
+    get:
+      tags: 
+        - carritos
+      summary: Recupera el cart del user identificado con id.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la usuario a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Responde con un array conteniendo los products del user solicitado.
+          content:
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  user: 
+                    type: number
+                  cart:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product:
+                          type: number
+                        quantity:
+                          type: number
+        '404':    # status code
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener el carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
+
+    put:
+      tags:
+        - carritos
+      summary: Actualiza el cart del user identificado con id solicitado.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la usuario a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product:
+                      type: number
+                    quantity:
+                      type: number
+      responses:
+        '200':    # status code
+          description: Responde con la info completa del cart modificado.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product:
+                      type: number
+                    quantity:
+                      type: number
+        '404':    # status code
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener el carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
+
+  /user/{id}/cart:
+    get:
+      tags: 
+        - usuarios
+      summary: Recupera el cart del user identificado con id.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la usuario a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      responses:
+        '200':    # status code
+          description: Responde con un array conteniendo los products del user solicitado.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    url:
+                      type: string
+                    description:
+                      type: string
+                    productId:
+                      type: number
+        '404':    # status code
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener el carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+    put:
+      tags:
+        - usuarios
+      summary: Actualiza el cart del user identificado con id solicitado.
+      security:
+        - bearerAuth: []
+      parameters:
+      - name: id
+        in: path
+        description: Id de la usuario a buscar. 
+        required: true
+        explode: true
+        schema:
+          type: number
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product:
+                      type: number
+                    quantity:
+                      type: number
+      responses:
+        '200':    # status code
+          description: Responde con la info completa del cart modificado.
+          content:
+            application/json:
+              schema: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    product:
+                      type: number
+                    quantity:
+                      type: number
+        '404':    # status code
+          description: Usuario no encontrado.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string
+        '500':    # status code
+          description: Error al obtener el carrito.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: false
+                  message:
+                    type: string 
