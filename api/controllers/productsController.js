@@ -287,7 +287,6 @@ const estanLosDatos = (campos) => {
     !campos.image ||
     !campos.gallery ||
     !campos.category ||
-    !campos.mostWanted ||
     !campos.stock
   ) {
     ret = false;
