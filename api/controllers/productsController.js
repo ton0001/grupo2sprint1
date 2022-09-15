@@ -122,8 +122,17 @@ const productController = {
       const filteredProduct = productParsered.filter((product) => {
         return product.mostWanted === true;
       });
+      if(filteredProduct.length === 0){
 
-      res.status(200).json(filteredProduct);
+        res.status(400).json({
+          ok: false,
+          menssage: 'No existen productos con mostWanted igual a true'
+        })
+      }else {
+        res.status(200).json(filteredProduct);
+      }
+
+      
     } catch (err) {
       console.log(err);
     }

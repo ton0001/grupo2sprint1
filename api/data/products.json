@@ -17,7 +17,7 @@
         ],
         "category": "Taza",
         "stock": 20,
-        "mostWanted": true
+        "mostWanted": false
     },
     {
         "id": 2,
@@ -33,7 +33,7 @@
         ],
         "category": "Milanesas",
         "stock": 10,
-        "mostWanted": true
+        "mostWanted": false
     },
     {
         "id": 3,
@@ -81,7 +81,7 @@
         ],
         "category": "Detergente",
         "stock": 20,
-        "mostWanted": true
+        "mostWanted": false
     },
     {
         "id": 6,
@@ -97,7 +97,7 @@
         ],
         "category": "Trapos de piso",
         "stock": 2,
-        "mostWanted": true
+        "mostWanted": false
     },
     {
         "id": 10,
@@ -116,7 +116,7 @@
             }
         ],
         "category": "Alfajores",
-        "mostWanted": true,
+        "mostWanted": false,
         "stock": 20
     }
 ]
