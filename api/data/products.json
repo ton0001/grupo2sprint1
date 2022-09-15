@@ -1,9 +1,9 @@
 [
     {
         "id": 1,
-        "title": "Alfajor",
-        "price": 50,
-        "description": "Punta Ballena",
+        "title": "Taza",
+        "price": 200,
+        "description": "Taza",
         "image": "",
         "gallery": [
             {
@@ -15,7 +15,7 @@
                 "picture_url": "https://img-global.cpcdn.com/recipes/fe4c45a1cd16ec27/1200x630cq70/photo.jpg"
             }
         ],
-        "category": "Alfajores",
+        "category": "Taza",
         "stock": 20,
         "mostWanted": true
     },
