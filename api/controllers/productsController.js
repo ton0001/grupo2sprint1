@@ -91,10 +91,13 @@ const productController = {
       const dataUpdate = data.map((product) => {
         if (product.id === Number(idProduct)) {
           const newEl = { ...product, ...restoDeElementos };
-          return newEl;
+         return res.status(200).json(newEl)
         } else {
-          //console.log(product);
-          return product;
+          return res.status(401).json({
+            "ok" : false,
+            "msg": "El producto no existe"
+          })
+        
         }
       });
       fs.writeFileSync("api/data/products.json", JSON.stringify(dataUpdate));
