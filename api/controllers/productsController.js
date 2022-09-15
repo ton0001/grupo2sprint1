@@ -227,10 +227,26 @@ const productController = {
        if(productdelete){
         const newData = data.filter(el => el.id !== Number(id));
         fs.writeFileSync('./api/data/products.json', JSON.stringify(newData));
-        res.status(200).json({
-              ok: true,
-              msg: "producto eliminado con exito",
-             });
+        
+        const picid=eliminarPicturesID(req, res, id)
+        const cartid= eliminarCartID(req.res, id)
+        if( picid && cartid ){
+          res.status(200).json({
+            ok: true,
+            msg: "producto eliminado con exito",
+          });
+        }else if(!picid){
+          res.status(500).json({
+            ok: false,
+            msg: "Error del servidor al borrar las imagenes asociadas al product pero producto elimnado con exito",
+          });
+        }
+        else if(!cartid){
+            res.status(500).json({
+              ok: false,
+              msg: "Error del servidor al borrar el producto de los carritos pero producto eliminado con exito e imagenes borrados con exito",
+            });
+        }
        }
        else{
           res.status(404).json({
@@ -240,7 +256,7 @@ const productController = {
        }
     }catch (error) {
        console.log(error);
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Error del servidor al eliminar el producto",
        });
@@ -258,4 +274,41 @@ const estanLosDatos = (campos)=>{
   }
   return ret
 
+}
+
+const eliminarPicturesID = (req, res, id) =>{
+
+  try{
+    const picturesToParse = fs.readFileSync('./api/data/gallery3.json', 'utf-8');
+    const pictures = JSON.parse(picturesToParse);
+
+    const pictFilter=pictures.filter(pic => (pic.productId !== Number(id)))
+  
+    if(pictFilter.length != pictures.length){
+      fs.writeFileSync('./api/data/gallery.json', JSON.stringify(pictFilter));
+    }
+    return true
+  }catch{
+    return false
+  }
+
+}
+
+const eliminarCartID = (req, res, id) =>{
+
+  try{
+    const cartsToParse = fs.readFileSync('./api/data/carts.json', 'utf-8');
+    const carts = JSON.parse(cartsToParse);
+
+    carts.forEach(car => {
+      let elcarrito=car.cart.filter(elem => elem.product != Number(id))
+      car.cart = elcarrito
+    })
+
+    fs.writeFileSync('./api/data/carts.json', JSON.stringify(carts));
+    return true
+  }
+  catch{
+    return false
+  }
 }
