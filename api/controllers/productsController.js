@@ -24,7 +24,7 @@ const productController = {
       const filteredProduct = readAllProductParsered.filter((product) => {
         return product.id === Number(req.params.id);
       });
-      if (filteredProduct === []) {
+      if (filteredProduct.length===0) {
         res.status(404).json({
           ok: false,
           msg: "El producto no existe",
@@ -129,19 +129,14 @@ const productController = {
         let products = fs.readFileSync(ruta, 'utf-8');        
         products = JSON.parse(products);
         
-
         let resp = products.find(elem => elem.id === parseInt(req.params.id));
-
-
-        resp = resp.gallery;
-
-
         if(!resp){
             res.status(404).json({
                 ok: false,
                 msg: 'no existen coincidencias'
             });
         }else{
+          resp = resp.gallery;
             res.status(200).json({
                 ok: true,
                 resp
@@ -182,6 +177,15 @@ const productController = {
       res.status(500).json({
         msg: 'Error interno'
      });
+    }
+  },
+
+  rutaProducts: (req, res)=> {
+    if (req.query.category){
+      productController.listCategory(req, res)
+    }
+    else {
+      productController.allProduct(req, res)
     }
   },
 

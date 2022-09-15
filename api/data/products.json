@@ -100,26 +100,6 @@
         "mostWanted": true
     },
     {
-        "id": 7,
-        "title": "Galletitas",
-        "price": 20,
-        "description": "Galletitas de chocolate",
-        "image": "",
-        "gallery": [
-            {
-                "picture_id": 9,
-                "picture_url": "WWW.1.COM"
-            },
-            {
-                "picture_id": 11,
-                "picture_url": "WWW.1.COM"
-            }
-        ],
-        "category": "Galletas",
-        "stock": 2,
-        "mostWanted": true
-    },
-    {
         "id": 10,
         "title": "Alfajor",
         "price": 100,

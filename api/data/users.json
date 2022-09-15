@@ -23,10 +23,10 @@
     "id": 3,
     "email": "rodri@gmail.com",
     "username": "rodri",
-    "password": "123456",
+    "password": "1234567",
     "firstname": "Rodrigo",
-    "lastname": "Alonso",
-    "profilepic": "https://thispersondoesnotexist.com/image3",
+    "lastname": "Ferreira",
+    "profilepic": "https://thispersondoesnotexist.com/image2",
     "role": "ADMIN"
   },
   {

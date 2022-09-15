@@ -11,8 +11,8 @@ const getPictureByProductId = (req, res) =>{
         pictures = JSON.parse(pictures);
 
         const resp = pictures.filter(elem => elem.productId === parseInt(req.query.product));
-
-        if(resp){
+       
+        if(resp.length>0){
             res.status(200).json({
                 ok: true,
                 resp
